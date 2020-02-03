@@ -21,18 +21,28 @@ class _TabNavigatorState extends State<TabNavigator> {
     return Scaffold(
       body: PageView(
         controller: _controller,
+        // 监听页面变化时改变_currentIndex来实时更新TabBar的状态
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        // 四个页面
         children: <Widget>[HomePage(), SearchPage(), TravelPage(), MyPage()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
+        // 点击TabBar切换页面
         onTap: (index) {
           _controller.jumpToPage(index);
           setState(() {
             _currentIndex = index;
           });
         },
+        // 设置TabBar的label一直存在
         type: BottomNavigationBarType.fixed,
         items: [
+          // 分别设置4个TabBar对应的icon和激活与未激活颜色
           BottomNavigationBarItem(
               icon: Icon(Icons.home, color: _defaultColor),
               activeIcon: Icon(

@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+//   TabNavigator来切换不同tab下的页面
       home: TabNavigator()
     );
   }

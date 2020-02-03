@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+
 const APPBAR_SCROLL_OFFSET = 100;
 
 class HomePage extends StatefulWidget {
@@ -14,13 +15,16 @@ class _HomePageState extends State<HomePage> {
     "https://www.itying.com/images/flutter/3.png",
   ];
 
+  // 初始默认是不显示
   double appBaralpha = 0;
 
+  // 监听滚动时 实现渐变效果
   _onScroll(offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
-    if(alpha<0){
+    // 边界条件时需要补效果
+    if (alpha < 0) {
       alpha = 0;
-    }else if(alpha>1){
+    } else if (alpha > 1) {
       alpha = 1;
     }
     setState(() {
@@ -33,9 +37,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         body: Stack(
       children: <Widget>[
+        // 用来去除Scaffold顶部的padding
         MediaQuery.removePadding(
             removeTop: true,
             context: context,
+            // 监听滚动条的位置
             child: NotificationListener(
               // ignore: missing_return
               onNotification: (scrollNotification) {
@@ -44,6 +50,7 @@ class _HomePageState extends State<HomePage> {
                   _onScroll(scrollNotification.metrics.pixels);
                 }
               },
+              // 使用ListView配合Swiper轮播图插件实现轮播
               child: ListView(
                 children: <Widget>[
                   Container(
@@ -51,12 +58,14 @@ class _HomePageState extends State<HomePage> {
                     child: Swiper(
                       itemCount: _imageUrls.length,
                       autoplay: true,
+                      // 使用itemBuilder和itemCount来循环_imageUrls中的图片
                       itemBuilder: (BuildContext context, int index) {
                         return Image.network(
                           _imageUrls[index],
                           fit: BoxFit.fill,
                         );
                       },
+                      // 设置圆点区分激活状态
                       pagination: SwiperPagination(),
                     ),
                   ),
@@ -69,7 +78,9 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             )),
+        // 将内容放在Opacity里可以实现透明变化效果
         Opacity(
+          // 必传参数
           opacity: appBaralpha,
           child: Container(
             height: 80,
